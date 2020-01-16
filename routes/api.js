@@ -21,6 +21,7 @@ module.exports = function(app) {
     var initUnit = convertHandler.getUnit(input);
 
     const isValidUnit = convertHandler.isValidUnit(initUnit);
+
     if (!isValidUnit && isNaN(initNum)) {
       return res.json({ error: "invalid number and unit" });
     }

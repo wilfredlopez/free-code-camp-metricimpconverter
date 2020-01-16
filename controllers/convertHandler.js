@@ -60,24 +60,39 @@ function ConvertHandler() {
     }
   };
 
-  this.getUnit = function(input = "") {
+  this.getUnit = function(input) {
     let result;
     //   If my unit of measurement is invalid, returned will be 'invalid unit'.
-    result = input.replace(/[0-9]/g, "").replace(/\./, "");
+    // result = input.replace(/[0-9]/g, "").replace(/\./, "");
 
-    return result;
+    let units = ["gal", "l", "lbs", "kg", "mi", "km"];
+    let letters = input.split(/([a-zA-z]+$)/); //split letters between numbers
+    letters = letters.filter(Boolean); //remove empty or white space
+    let inputUnit = letters[letters.length - 1];
+
+    //if no units matches units inside array,
+    //return invalid unit
+    let unit = inputUnit.toLowerCase();
+    if (!units.includes(unit)) {
+      return "invalid unit";
+    }
+
+    return inputUnit;
+    // return result;
   };
 
   this.getReturnUnit = function(initUnit) {
     let result;
     let unit = initUnit.toLowerCase();
+
     switch (unit) {
       case "gal":
-        result = "L";
+        result = "l";
         break;
       case "l":
         result = "gal";
         break;
+
       case "lbs":
         result = "kg";
         break;
@@ -131,10 +146,10 @@ function ConvertHandler() {
         result = +(initNum / galToL).toFixed(5);
         break;
       case "lbs":
-        result = initNum / lbsToKg;
+        result = +(initNum * lbsToKg).toFixed(5);
         break;
       case "kg":
-        result = initNum * lbsToKg;
+        result = +(initNum / lbsToKg).toFixed(5);
         break;
       case "mi":
         result = initNum * miToKm;
